@@ -19,6 +19,10 @@ public class BookRepo {
     @Autowired
     private JdbcTemplate template;
 
+    public List<Book> getBooks(final int limit) {
+        return this.getBooks(limit, 0);
+    }
+
     public List<Book> getBooks(final int limit, final int offset) {
         final List<Book> result = new LinkedList<>();
         final SqlRowSet rs = template.queryForRowSet(

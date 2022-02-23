@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import jakarta.json.Json;
@@ -28,20 +29,23 @@ public class BookRestController {
     private BookService bookSvc;
 
     @GetMapping
-    public ResponseEntity<String> getBooksByRequestParam(String page) {
-        return getBooks(page);
+    public ResponseEntity<String> getBooksByRequestParam(
+            @RequestParam(defaultValue = "10") int limit,
+            @RequestParam(defaultValue = "0") int offset) {
+        return getBooks(limit, offset);
     }
 
-    @GetMapping(value = "/{page}")
-    public ResponseEntity<String> getBooksByPathVariable(@PathVariable String page) {
-        return getBooks(page);
+    @GetMapping(value = "/{offset}")
+    public ResponseEntity<String> getBooksByPathVariable(
+            @PathVariable int offset) {
+        return getBooks(10, offset);
     }
 
-    private ResponseEntity<String> getBooks(String page) {
+    private ResponseEntity<String> getBooks(int limit, int offset) {
         try {
-            logger.info("Retrieving Page >>>>> " + page);
+            logger.info("Retrieving Page >>>>> " + offset);
             JsonArrayBuilder jab = Json.createArrayBuilder();
-            List<Book> books = bookSvc.getBooks(Integer.valueOf(page).intValue());
+            List<Book> books = bookSvc.getBooks(limit, offset);
             for (Book b : books) {
                 jab.add(b.toJson());
             }

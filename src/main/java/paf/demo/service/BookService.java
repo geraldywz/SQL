@@ -14,8 +14,8 @@ public class BookService {
     @Autowired
     private BookRepo repo;
 
-    public List<Book> getBooks(final int page) {
-        return repo.getBooks(10, page);
+    public List<Book> getBooks(int limit, int offset) {
+        return repo.getBooks(limit, offset);
     }
 
 }
