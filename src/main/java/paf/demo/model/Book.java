@@ -2,6 +2,8 @@ package paf.demo.model;
 
 import java.util.Objects;
 
+import org.springframework.jdbc.support.rowset.SqlRowSet;
+
 import jakarta.json.Json;
 import jakarta.json.JsonObject;
 
@@ -14,7 +16,7 @@ public class Book {
     private String edition;
     private String format;
     private int pages;
-    private double rating;
+    private float rating;
     private int ratingCount;
     private int reviewCount;
     private String genres;
@@ -24,7 +26,7 @@ public class Book {
     }
 
     public Book(String bookid, String title, String authors, String description, String edition, String format,
-            int pages, double rating, int ratingCount, int reviewCount, String genres, String imageUrl) {
+            int pages, float rating, int ratingCount, int reviewCount, String genres, String imageUrl) {
         this.bookid = bookid;
         this.title = title;
         this.authors = authors;
@@ -95,11 +97,11 @@ public class Book {
         this.pages = pages;
     }
 
-    public double getRating() {
+    public float getRating() {
         return this.rating;
     }
 
-    public void setRating(double rating) {
+    public void setRating(float rating) {
         this.rating = rating;
     }
 
@@ -170,7 +172,7 @@ public class Book {
         return this;
     }
 
-    public Book rating(double rating) {
+    public Book rating(float rating) {
         setRating(rating);
         return this;
     }
@@ -251,4 +253,19 @@ public class Book {
                 "}";
     }
 
+    public static Book populate(SqlRowSet rs) {
+        return new Book(
+                rs.getString("book_id"),
+                rs.getString("title"),
+                rs.getString("authors"),
+                rs.getString("description"),
+                rs.getString("edition"),
+                rs.getString("format"),
+                rs.getInt("pages"),
+                rs.getFloat("rating"),
+                rs.getInt("rating_count"),
+                rs.getInt("review_count"),
+                rs.getString("genres"),
+                rs.getString("image_url"));
+    }
 }

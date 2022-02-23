@@ -28,6 +28,25 @@ public class BookRestController {
     @Autowired
     private BookService bookSvc;
 
+    @GetMapping(path = "/formats")
+    public ResponseEntity<String> getBookFormats() {
+        List<String> formats = bookSvc.getFormats();
+        JsonArrayBuilder jab = Json.createArrayBuilder();
+        formats.stream().forEach(format -> jab.add(format));
+        return ResponseEntity
+                .ok()
+                .body(jab.build().toString());
+    }
+
+    @GetMapping(path = "/count/{format}")
+    public ResponseEntity<String> getBookFormatCount(
+            @PathVariable String format) {
+        int count = bookSvc.getBookFormatCount(format);
+        return ResponseEntity
+                .ok()
+                .body(count + "");
+    }
+
     @GetMapping
     public ResponseEntity<String> getBooksByRequestParam(
             @RequestParam(defaultValue = "10") int limit,
@@ -46,20 +65,17 @@ public class BookRestController {
             logger.info("Retrieving Page >>>>> " + offset);
             JsonArrayBuilder jab = Json.createArrayBuilder();
             List<Book> books = bookSvc.getBooks(limit, offset);
-            for (Book b : books) {
-                jab.add(b.toJson());
-            }
+            books.stream().forEach(book -> jab.add(book.toJson()));
             return ResponseEntity
                     .ok()
                     .body(jab.build().toString());
         } catch (Exception e) {
             return ResponseEntity
                     .status(HttpStatus.BAD_REQUEST)
-                    .body(
-                            Json.createObjectBuilder()
-                                    .add("Error", "Invalid page request.")
-                                    .build()
-                                    .toString());
+                    .body(Json.createObjectBuilder()
+                            .add("Error", "Invalid page request.")
+                            .build()
+                            .toString());
         }
     }
 }
