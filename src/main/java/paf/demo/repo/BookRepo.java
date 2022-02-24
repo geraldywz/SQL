@@ -54,6 +54,7 @@ public class BookRepo {
     }
 
     public int getBookFormatCount(String format) {
+        logger.info("Counting Books with format >>>>> " + format);
         final SqlRowSet rs = template.queryForRowSet(
                 SQL_GET_BOOKS_FORMAT_COUNT,
                 format);
@@ -61,6 +62,7 @@ public class BookRepo {
         if (rs.next()) {
             result = rs.getInt("formats");
         }
+        logger.info("Number of " + format + " books exist >>>>> " + result);
         return result;
     }
 
