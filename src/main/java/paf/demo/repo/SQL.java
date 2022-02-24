@@ -9,5 +9,5 @@ public class SQL {
 
     public static final String SQL_GET_BOOKS_FORMAT = "SELECT DISTINCT(format) FROM book2018 WHERE format NOT LIKE ''";
 
-    public static final String SQL_GET_BOOKS_FORMAT_COUNT = "SELECT COUNT(FORMAT) from book2018 WHERE FORMAT LIKE '?'";
+    public static final String SQL_GET_BOOKS_FORMAT_COUNT = "SELECT COUNT(*) AS formats from book2018 WHERE FORMAT LIKE ?";
 }

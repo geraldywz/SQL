@@ -4,6 +4,8 @@ import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.support.rowset.SqlRowSet;
@@ -18,6 +20,8 @@ public class BookRepo {
 
     @Autowired
     private JdbcTemplate template;
+
+    private static final Logger logger = LoggerFactory.getLogger(BookRepo.class);
 
     public List<Book> getBooks(final int limit) {
         return this.getBooks(limit, 0);
@@ -53,7 +57,11 @@ public class BookRepo {
         final SqlRowSet rs = template.queryForRowSet(
                 SQL_GET_BOOKS_FORMAT_COUNT,
                 format);
-        return Integer.parseInt(rs.toString());
+        int result = 0;
+        if (rs.next()) {
+            result = rs.getInt("formats");
+        }
+        return result;
     }
 
     public List<String> getFormats() {
